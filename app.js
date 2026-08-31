@@ -5,6 +5,7 @@ import passport from "passport";
 import initializePassport from "./config/passport.js";
 import indexRouter from "./routes/index.js";
 import authRouter from "./routes/auth.js";
+import folderRouter from "./routes/folder.js"
 
 const app = express();
 initializePassport(passport);
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use("/", indexRouter);
 app.use("/", authRouter);
+app.use("/folders", folderRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
