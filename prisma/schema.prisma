@@ -24,7 +24,8 @@ model File {
   name      String
   size      Int
   createdAt DateTime @default(now())
-  url       String
+  path      String
+  url       String?
 
   folder    Folder @relation(fields: [folderId], references: [id])
   folderId  Int
