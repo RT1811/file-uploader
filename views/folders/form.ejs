@@ -7,7 +7,11 @@
 <body>
   <h1>New Folder</h1>
 
-  <form method="POST" action="/folders/new">
+  <% if (parentFolderId) { %>
+    <form method="POST" action="/folders/<%= parentFolderId %>/new">
+  <% } else { %>
+    <form method="POST" action="/folders/new">
+  <% } %>
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
 

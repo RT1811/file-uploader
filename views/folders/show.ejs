@@ -7,6 +7,8 @@
 <body>
     <h1><%= folder.name %></h1>
 
+    <a href="/folders/<%= folder.id %>/new">New Folder</a>
+
     <h2>Folders</h2>
 
     <% folder.childFolders.forEach((child) => { %>
