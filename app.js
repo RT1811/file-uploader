@@ -28,8 +28,6 @@ app.use((req, res, next) => {
   next();
 });
 
-import indexRouter from "./routes/index.js";
-import authRouter from "./routes/auth.js";
 app.use("/", indexRouter);
 app.use("/", authRouter);
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+</head>
+<body>
+  <p>Logged in as <%= currentUser.username %></p>
+
+    <form method="POST" action="/log-out">
+    <button type="submit">Log Out</button>
+    </form>
+
+    <a href="/folders/new">New Folder</a>
+
+    <h2>Your Folders</h2>
+
+    <% folders.forEach((folder) => { %>
+    <a href="/folders/<%= folder.id %>">
+        <%= folder.name %>
+    </a>
+  <% }) %>
+</body>
+</html>

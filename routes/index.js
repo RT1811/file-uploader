@@ -4,6 +4,10 @@ import { prisma } from "../lib/prisma.js"
 const router  = Router();
 
 router.get("/", async (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/log-in");
+    }
+
     try {
         const folders = await prisma.folder.findMany({
             where: { authorId: req.user.id, parentFolderId: null },
