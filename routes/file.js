@@ -87,4 +87,37 @@ router.post("files/:id/download", async (req, res, next) => {
     }
 });
 
+router.post("/files/:id/delete", async (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/log-in");
+    }
+
+    try {
+        const file = await prisma.file.findFirst({
+            where: {
+                id: Number(req.params.id),
+                folder: {
+                    authorId: req.user.id,
+                },
+            },
+        });
+
+        if (!file) {
+            return res.status(404).send("File not found");
+        }
+
+        await fs.unlink(file.path);
+
+        await prisma.file.delete({
+            where: {
+                id: file.id,
+            },
+        });
+
+        res.redirect(`/folders/${file.folderId}`);
+    } catch (err) {
+        next(err);
+    }
+});
+
 export default router;

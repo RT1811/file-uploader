@@ -12,4 +12,9 @@
     <p>Uploaded: <%= file.createdAt %></p>
 
     <a href="/files/<%= file.id %>/download">Download</a>
+
+    <form method="post" action="/files/<%= file.id %>/delete" onsubmit="return confirm('Delete this file?')">
+        <button type="submit">Delete File</button>
+    </form>
+
 </body>
