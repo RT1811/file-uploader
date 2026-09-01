@@ -1,6 +1,7 @@
 import { Router } from "express";
 import upload from "../config/multer.js";
 import { prisma } from "../lib/prisma.js";
+import fs from "fs/promises";
 
 const router = Router();
 
@@ -61,7 +62,7 @@ router.get("/files/:id", async (req, res, next) => {
     }
 });
 
-router.post("/:id/download", async (req, res, next) => {
+router.post("files/:id/download", async (req, res, next) => {
     if (!req.user) {
         return res.redirect("/log-in");
     }
