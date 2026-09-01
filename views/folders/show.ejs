@@ -31,6 +31,11 @@
 
   <h2>Files</h2>
 
+  <form method="POST" action="/folders/<%= folder.id %>/files" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <button type="submit">Upload File</button>
+  </form>
+
   <% folder.files.forEach((file) => { %>
     <p><%= file.name %></p>
   <% }) %>
