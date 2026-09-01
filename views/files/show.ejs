@@ -10,4 +10,6 @@
 
     <p>Size: <%= file.size %> bytes</p>
     <p>Uploaded: <%= file.createdAt %></p>
+
+    <a href="/files/<%= file.id %>/download">Download</a>
 </body>
