@@ -75,7 +75,6 @@ router.post("/:id/new", async (req, res, next) => {
     }
 
     try {
-        const { name } = req.body;
 
         const parentFolder = await prisma.folder.findFirst({
             where: {
@@ -97,6 +96,96 @@ router.post("/:id/new", async (req, res, next) => {
         });
 
         res.redirect(`/folders/${parentFolder.id}`);
+    } catch(err) {
+        next(err);
+    }
+});
+
+router.get("/:id/rename", async (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/log-in");
+    }
+
+    try {
+        const folder = await prisma.folder.findFirst({
+            where: {
+                id: Number(req.params.id),
+                authorId: req.user.id,
+            },
+        })
+
+        if(!folder) {
+            return res.status(404).send("Folder not found");
+        }
+
+        res.render("folder/edit", { folder });
+    } catch(err) {
+        next(err);
+    }
+})
+
+router.post("/:id/rename", async (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/log-in");
+    }
+
+    try {
+        const folder = await prisma.folder.findFirst({
+            where: {
+                id: Number(req.params.id),
+                authorId: req.user.id,
+            },
+        });
+
+        if (!folder) {
+            return res.status(404).send("Folder not found");
+        }
+
+        await prisma.folder.update({
+            where: {
+                id: folder.id,
+            },
+            data: {
+                name: req.body.name,
+            },
+        });
+
+        res.redirect(`/folders/${folder.id}`);
+    } catch(err) {
+        next(err)
+    }
+});
+
+router.post("/:id/delete", async (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/log-in");
+    }
+
+    try {
+        const folder = await prisma.folder.findFirst({
+            where: {
+                id: Number(req.params.id),
+                authorId: req.user.id,
+            },
+        });
+
+        if (!folder) {
+            return res.status(404).send("Folder not found");
+        }
+
+        const parentFolderId = folder.parentFolderId;
+
+        await prisma.folder.delete({
+            where: {
+                id: folder.id,
+            },
+        });
+
+        if (parentFolderId) {
+            res.redirect(`/folders/${parentFolderId}`);
+        } else {
+            res.redirect("/");
+        }
     } catch(err) {
         next(err);
     }

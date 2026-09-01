@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Folder Name</title>
+</head>
+
+<body>
+  <h1>Edit Folder Name</h1>
+
+  <form method="POST" action="/folders/<%= folder.id %>/rename">
+    <input
+      type="text"
+      name="name"
+      value="<%= folder.name %>"
+      required
+    >
+
+    <button type="submit">Rename</button>
+  </form>
+</body>
+
+</html>

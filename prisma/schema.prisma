@@ -27,7 +27,7 @@ model File {
   path      String
   url       String?
 
-  folder    Folder @relation(fields: [folderId], references: [id])
+  folder    Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId  Int
 }
 
@@ -41,7 +41,7 @@ model Folder {
 
   files File[]
 
-  parentFolder   Folder?  @relation("FolderToFolder", fields: [parentFolderId], references: [id])
+  parentFolder   Folder?  @relation("FolderToFolder", fields: [parentFolderId], references: [id], onDelete: Cascade)
   parentFolderId Int?
   childFolders   Folder[] @relation("FolderToFolder")
 }
