@@ -37,7 +37,7 @@
   </form>
 
   <% folder.files.forEach((file) => { %>
-    <p><%= file.name %></p>
+    <a href="/files/<%= file.id %>"><%= file.name %></a>
   <% }) %>
 </body>
 

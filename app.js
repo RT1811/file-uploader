@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use("/", indexRouter);
 app.use("/", authRouter);
 app.use("/folders", folderRouter);
-app.use("/folders", fileRouter);
+app.use("/", fileRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

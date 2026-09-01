@@ -4,7 +4,7 @@ import { prisma } from "../lib/prisma.js";
 
 const router = Router();
 
-router.post("/:id/files", upload.single("file"), async (req, res, next) => {
+router.post("/folders/:id/files", upload.single("file"), async (req, res, next) => {
     if (!req.user) {
         return res.redirect("/log-in");
     }
@@ -31,6 +31,31 @@ router.post("/:id/files", upload.single("file"), async (req, res, next) => {
         });
 
         res.redirect(`/folders/${folder.id}`);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get("/files/:id", async (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/log-in");
+    }
+
+    try {
+        const file = await prisma.file.findFirst({
+            where: {
+                id: Number(req.params.id),
+                folder: {
+                    authorId: req.user.id,
+                },
+            },
+        });
+
+        if (!file) {
+            return res.status(404).send("File not found");
+        }
+
+        res.render("files/show", { file });
     } catch (err) {
         next(err);
     }
