@@ -118,7 +118,7 @@ router.get("/:id/rename", async (req, res, next) => {
             return res.status(404).send("Folder not found");
         }
 
-        res.render("folder/edit", { folder });
+        res.render("folders/edit", { folder });
     } catch(err) {
         next(err);
     }
