@@ -35,9 +35,12 @@ router.post("/folders/:id/files", upload.single("file"), async (req, res, next) 
                 size: req.file.size,
                 path: req.file.path,
                 url: result.secure_url,
+                publicId: result.public_id,
                 folderId: folder.id,
             },
         });
+
+        await fs.unlink(req.file.path);
 
         res.redirect(`/folders/${folder.id}`);
     } catch (err) {
@@ -71,7 +74,7 @@ router.get("/files/:id", async (req, res, next) => {
     }
 });
 
-router.post("files/:id/download", async (req, res, next) => {
+router.get("/files/:id/download", async (req, res, next) => {
     if (!req.user) {
         return res.redirect("/log-in");
     }
@@ -90,8 +93,8 @@ router.post("files/:id/download", async (req, res, next) => {
             return res.status(404).send("File not found");
         }
 
-        res.download(file.path, file.name);
-    } catch(err) {
+        res.redirect(file.url);
+    } catch (err) {
         next(err);
     }
 });

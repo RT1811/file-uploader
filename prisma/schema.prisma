@@ -26,6 +26,7 @@ model File {
   createdAt DateTime @default(now())
   path      String
   url       String?
+  publicId  String?
 
   folder    Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId  Int
