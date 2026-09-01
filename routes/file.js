@@ -1,16 +1,39 @@
 import { Router } from "express";
 import upload from "../config/multer.js";
+import { prisma } from "../lib/prisma.js";
 
 const router = Router();
 
-router.post("/:id/files", upload.single("file"), (req, res) => {
+router.post("/:id/files", upload.single("file"), async (req, res, next) => {
     if (!req.user) {
         return res.redirect("/log-in");
     }
 
-    console.log(req.file);
+    try {
+        const folder = await prisma.folder.findFirst({
+            where: {
+                id: Number(req.params.id),
+                authorId: req.user.id,
+            },
+        });
 
-    res.redirect(`/folders/${req.params.id}`);
+        if (!folder) {
+            return res.status(404).send("Folder not found");
+        }
+
+        await prisma.file.create({
+            data: {
+                name: req.file.originalname,
+                size: req.file.size,
+                path: req.file.path,
+                folderId: folder.id,
+            },
+        });
+
+        res.redirect(`/folders/${folder.id}`);
+    } catch (err) {
+        next(err);
+    }
 });
 
 export default router;
