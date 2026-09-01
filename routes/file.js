@@ -36,6 +36,7 @@ router.post("/folders/:id/files", upload.single("file"), async (req, res, next) 
                 path: req.file.path,
                 url: result.secure_url,
                 publicId: result.public_id,
+                resourceType: result.resource_type,
                 folderId: folder.id,
             },
         });
@@ -118,7 +119,9 @@ router.post("/files/:id/delete", async (req, res, next) => {
             return res.status(404).send("File not found");
         }
 
-        await fs.unlink(file.path);
+        await cloudinary.uploader.destroy(file.publicId, {
+            resource_type: file.resourceType,
+        });
 
         await prisma.file.delete({
             where: {
