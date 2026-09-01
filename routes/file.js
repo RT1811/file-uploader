@@ -2,6 +2,7 @@ import { Router } from "express";
 import upload from "../config/multer.js";
 import { prisma } from "../lib/prisma.js";
 import fs from "fs/promises";
+import cloudinary from "../config/cloudinary.js";
 
 const router = Router();
 
@@ -22,17 +23,25 @@ router.post("/folders/:id/files", upload.single("file"), async (req, res, next) 
             return res.status(404).send("Folder not found");
         }
 
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            resource_type: "auto",
+        });
+
+        console.log(result);
+
         await prisma.file.create({
             data: {
                 name: req.file.originalname,
                 size: req.file.size,
                 path: req.file.path,
+                url: result.secure_url,
                 folderId: folder.id,
             },
         });
 
         res.redirect(`/folders/${folder.id}`);
     } catch (err) {
+        console.error(err);
         next(err);
     }
 });
